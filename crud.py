@@ -52,6 +52,14 @@ def get_department_by_name(department_name: str):
     return db.session.query(Department).filter_by(name=department_name).first()
 
 
+def delete_department_by_id(department_id):
+    department = get_department_by_id(department_id)
+    if department:
+        db.session.delete(department)
+        db.session.commit()
+        return department
+
+
 def update_average_salary(department_name: str):
     employee_list = db.session.query(Employee).filter_by(department_name=department_name).all()
     department = db.session.query(Department).filter_by(name=department_name).first()
