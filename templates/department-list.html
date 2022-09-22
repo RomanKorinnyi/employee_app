@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% include 'header.html' %}
+ 
+{% block title %} Departments {% endblock %}
+ 
+{% block body %}
+
+<div class="container">
+ <table class="table">
+     <thead style="background-color: brown;color: aliceblue;">
+        <th>ID</th>
+        <th>Name</th>
+        <th>Average Salary</th>
+        <th> </th>
+    </thead>
+
+   <tbody>
+    {% for department in departments %}
+    <tr
+    {% if loop.index %2==0 %}
+    style="background-color: rgb(255, 217, 247);"
+    {% else %}
+    style="background-color: rgb(248, 169, 231);"
+    {% endif %}
+    ><td>{{ loop.index }}</td>
+    <td>{{department.name}}</td>
+    <td>{{department.average_salary}}</td>
+
+    <td> <span style="font-size: 24px;color:green;">
+       <a href="/{{department.id}}/edit"> <i class="fas fa-edit"></i></a> </span>
+        | <span style="font-size: 24px;color:red;">  
+          <a href="/{{department.id}}/delete"> <i class="fas fa-trash-alt"></i></a></span></td>
+    {% endfor %}
+   </tbody>
+ </table>
+  
+</div>
+
+
+{% endblock %}

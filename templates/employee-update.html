@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% include 'header.html' %}
+
+
+
+{% block title %} Home {% endblock %}
+
+
+
+{% block body %}
+    <div class="container">
+        <form action='' method="POST">
+            <table class="table">
+                <tr>
+                    <td>First Name</td>
+                    <td><input type="text" name="first_name" value="{{ employee.first_name }}" class="form-control"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Last Name</td>
+                    <td><input type="text" name="last_name" class="form-control" value="{{ employee.last_name }}"/></td>
+                </tr>
+
+                <tr>
+                    <td>Birth Date</td>
+                    <td><input type="date" name="birth_date" class="form-control" value="{{ employee.birth_date }}"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Salary</td>
+                    <td><input type="number" step="0.01" name="salary" class="form-control"
+                               value="{{ employee.salary }}"/></td>
+                </tr>
+
+
+                <tr>
+                    <td>Department</td>
+                    <td>
+                        <select name="department" class="form-control">
+                            {% for department in departments %}
+                                <option value={{ department.name }} {% if department.name  in employee.department_name %}
+                                    selected
+                                {% endif %}>{{ department.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2">
+                        <input type="submit" name="submit" value="submit" class="btn btn-warning">
+                    </td>
+
+                </tr>
+
+            </table>
+
+        </form>
+
+    </div>
+{% endblock %}
+
+
