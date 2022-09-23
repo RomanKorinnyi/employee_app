@@ -1,14 +1,50 @@
+import flask
 from flask import Blueprint, render_template
 from flask import Flask, render_template, request, redirect
 from models import db, Department, Employee
-from crud import add_employee, get_employees, get_departments, get_department_by_name, update_average_salary, delete_employee_by_id, get_employee_by_id
+from crud import add_employee, get_departments, update_average_salary, add_department, delete_department_by_id, get_department_by_id, update_department_name
 
 departments = Blueprint("departments", __name__, template_folder='templates')
 
 
-@departments.route('/')
+@departments.route('/', methods=['GET'])
 def view_departments():
     departments_list = get_departments()
     for department in departments_list:
         update_average_salary(department.name)
     return render_template('department-list.html', departments=departments_list)
+
+
+@departments.route('/', methods=['POST'])
+def create_department():
+    """Route creates new department.
+        If the method is GET, the create page is rendered.
+        If method is POST, redirects to home page"""
+    if request.method == 'POST':
+        add_department(
+            department_name=request.form['department_name']
+        )
+
+    return redirect('/departments')
+
+
+@departments.route('/<int:department_id>/delete', methods=['GET', 'POST'])
+def delete_employee(department_id):
+    if request.method == 'POST':
+        department = delete_department_by_id(department_id)
+        if department:
+            return redirect('/departments')
+        flask.abort(404)
+    return render_template('delete.html')
+
+
+@departments.route('/<int:department_id>/edit', methods=['GET', 'POST'])
+def edit_department(department_id):
+    department = get_department_by_id(department_id)
+    if request.method == 'POST':
+        if department:
+            update_department_name(department_id, request.form['department_name'])
+
+        return redirect('/departments')
+
+    return render_template('department-update.html', department=department)

@@ -28,11 +28,11 @@ def get_employees():
     return db.session.query(Employee).order_by(Employee.id).all()
 
 
-def get_employee_by_id(employee_id):
+def get_employee_by_id(employee_id: int):
     return db.session.query(Employee).filter_by(id=employee_id).first()
 
 
-def delete_employee_by_id(employee_id):
+def delete_employee_by_id(employee_id: int):
     employee = get_employee_by_id(employee_id)
     if employee:
         db.session.delete(employee)
@@ -60,6 +60,14 @@ def delete_department_by_id(department_id):
         return department
 
 
+def add_department(department_name: str):
+    department = Department(name=department_name)
+    db.session.add(department)
+    db.session.commit()
+    db.session.refresh(department)
+    return department
+
+
 def update_average_salary(department_name: str):
     employee_list = db.session.query(Employee).filter_by(department_name=department_name).all()
     department = db.session.query(Department).filter_by(name=department_name).first()
@@ -70,6 +78,15 @@ def update_average_salary(department_name: str):
         department.average_salary = average_sal / len(employee_list)
     else:
         department.average_salary = 0
+    db.session.commit()
+    db.session.refresh(department)
+
+    return department
+
+
+def update_department_name(department_id: int, department_name: str):
+    department = get_department_by_id(department_id)
+    department.name = department_name
     db.session.commit()
     db.session.refresh(department)
 

@@ -24,7 +24,6 @@ def create_employee():
         return render_template('create-employee.html', departments=get_departments())
 
     if request.method == 'POST':
-        print(request.form['birth_date'])
         add_employee(
             first_name=request.form['first_name'],
             last_name=request.form['last_name'],
