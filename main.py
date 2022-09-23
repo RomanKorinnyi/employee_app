@@ -1,12 +1,10 @@
-import flask
-from flask import Flask, render_template, request, redirect
-from models import db, User
-from crud import add_employee, get_employees, get_departments, get_department_by_name, update_average_salary, delete_employee_by_id, get_employee_by_id
-from departments import departments
-from employees import employees
-from authenticate import auth
+from flask import Flask
 from flask_login import LoginManager
 
+from authenticate import auth
+from departments import departments
+from employees import employees
+from models import db, User
 
 app = Flask(__name__)
 
@@ -19,6 +17,7 @@ db.init_app(app)
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 login_manager.init_app(app)
+
 
 @login_manager.user_loader
 def load_user(id):

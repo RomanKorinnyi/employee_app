@@ -1,5 +1,6 @@
-from models import db, Department, Employee
 from datetime import date
+
+from models import db, Department, Employee
 
 
 def add_employee(first_name: str, last_name: str, birth_date: str, salary: str, department_name: str):
@@ -91,6 +92,3 @@ def update_department_name(department_id: int, department_name: str):
     db.session.refresh(department)
 
     return department
-
-
-

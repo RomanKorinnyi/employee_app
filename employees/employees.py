@@ -1,10 +1,10 @@
 import flask
-from flask import Blueprint, render_template
-from flask import Flask, render_template, request, redirect
-from models import db, Department, Employee
-from crud import add_employee, get_employees, get_departments, get_department_by_name, update_average_salary, delete_employee_by_id, get_employee_by_id
+from flask import Blueprint
+from flask import render_template, request, redirect
 from flask_login import login_required, current_user
 
+from crud import add_employee, get_employees, get_departments, delete_employee_by_id, get_employee_by_id
+from models import Employee
 
 employees = Blueprint("employees", __name__, template_folder='templates')
 
@@ -41,7 +41,7 @@ def create_employee():
 
 @employees.route('/<int:id>')
 @login_required
-def employee_view(employee_id):
+def employee_view(employee_id: int):
     employee = Employee.query.filter_by(id=employee_id).first()
     if employee:
         return render_template('employee-data.html', employee=employee)
@@ -50,7 +50,7 @@ def employee_view(employee_id):
 
 @employees.route('/<int:employee_id>/delete', methods=['GET', 'POST'])
 @login_required
-def delete_employee(employee_id):
+def delete_employee(employee_id: int):
     if request.method == 'POST':
         employee = delete_employee_by_id(employee_id)
         if employee:

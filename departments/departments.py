@@ -1,10 +1,10 @@
 import flask
-from flask import Blueprint, render_template
-from flask import Flask, render_template, request, redirect
-from models import db, Department, Employee
-from crud import add_employee, get_departments, update_average_salary, add_department, delete_department_by_id, get_department_by_id, update_department_name
+from flask import Blueprint
+from flask import render_template, request, redirect
 from flask_login import login_required, current_user
 
+from crud import get_departments, update_average_salary, add_department, delete_department_by_id, get_department_by_id,\
+    update_department_name
 
 departments = Blueprint("departments", __name__, template_folder='templates')
 
