@@ -52,7 +52,7 @@ def get_department_by_name(department_name: str):
     return db.session.query(Department).filter_by(name=department_name).first()
 
 
-def delete_department_by_id(department_id):
+def delete_department_by_id(department_id: int):
     department = get_department_by_id(department_id)
     if department:
         db.session.delete(department)

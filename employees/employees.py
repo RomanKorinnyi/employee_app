@@ -3,25 +3,29 @@ from flask import Blueprint, render_template
 from flask import Flask, render_template, request, redirect
 from models import db, Department, Employee
 from crud import add_employee, get_employees, get_departments, get_department_by_name, update_average_salary, delete_employee_by_id, get_employee_by_id
+from flask_login import login_required, current_user
+
 
 employees = Blueprint("employees", __name__, template_folder='templates')
 
 
 @employees.route('/')
+@login_required
 def index():
     """
     Shows page with the list of employees
     """
-    return render_template('employee-list.html', employees=get_employees())
+    return render_template('employee-list.html', employees=get_employees(), user=current_user)
 
 
 @employees.route('/create-employee', methods=['GET', 'POST'])
+@login_required
 def create_employee():
     """Route for creating new employee.
     If the method is GET, the create page is rendered.
     If method is POST, redirects to home page"""
     if request.method == 'GET':
-        return render_template('create-employee.html', departments=get_departments())
+        return render_template('create-employee.html', departments=get_departments(), user=current_user)
 
     if request.method == 'POST':
         add_employee(
@@ -36,6 +40,7 @@ def create_employee():
 
 
 @employees.route('/<int:id>')
+@login_required
 def employee_view(employee_id):
     employee = Employee.query.filter_by(id=employee_id).first()
     if employee:
@@ -44,16 +49,18 @@ def employee_view(employee_id):
 
 
 @employees.route('/<int:employee_id>/delete', methods=['GET', 'POST'])
+@login_required
 def delete_employee(employee_id):
     if request.method == 'POST':
         employee = delete_employee_by_id(employee_id)
         if employee:
             return redirect('/')
         flask.abort(404)
-    return render_template('delete.html')
+    return render_template('delete.html', user=current_user)
 
 
 @employees.route('/<int:employee_id>/edit', methods=['GET', 'POST'])
+@login_required
 def edit_employee(employee_id):
     employee = get_employee_by_id(employee_id)
     if request.method == 'POST':
@@ -68,4 +75,4 @@ def edit_employee(employee_id):
         )
 
         return redirect('/')
-    return render_template('employee-update.html', employee=employee, departments=get_departments())
+    return render_template('employee-update.html', employee=employee, departments=get_departments(), user=current_user)

@@ -1,3 +1,4 @@
+from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -8,6 +9,7 @@ class Department(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
     average_salary = db.Column(db.Float(precision=2), nullable=True)
+    employees = db.relationship('Employee')
 
     def __repr__(self):
         return '<Department {}>'.format(self.name)
@@ -28,3 +30,9 @@ class Employee(db.Model):
                f'salary {self.salary}, ' \
                f'department id {self.department_id} >'
 
+
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(150), unique=True)
+    password = db.Column(db.String(150))
+    first_name = db.Column(db.String(64))
